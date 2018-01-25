@@ -1,10 +1,14 @@
 Inviqa Disqus Bundle
 ====================
 
-This Bundle provides a Twig Extension for aiding with Disqus integration.
+This Bundle provides a simple Twig Extension for aiding with Disqus integration.
 
 Integration
 -----------
+
+**WARNING**: For some reason it was required to remove the `-` from the user
+_identifier_ in order that Disqus could decode the data. Use the replace
+filter: `replace({'-': ''})` on the user ID below if required.
 
 Create a Twig template as follows:
 
@@ -15,7 +19,11 @@ Create a Twig template as follows:
     var disqus_config = function () {
 
         {% if <the user is logged in> %}
-            this.page.remote_auth_s3 = '{{ inviqa_disqus_get_remote_auth_s3(<userId>, <username>, <email>) }}';
+            this.page.remote_auth_s3 = '{{ inviqa_disqus_get_remote_auth_s3(
+                <userId>, 
+                <username>, 
+                <email>
+            ) }}';
             this.page.api_key = '{{ inviqa_disqus_public_key() }}';
         {% endif %}
 
