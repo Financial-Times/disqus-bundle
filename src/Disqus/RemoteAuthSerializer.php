@@ -25,7 +25,7 @@ class RemoteAuthSerializer
     public function remoteAuthForUser($identifier, string $username, string $email): string
     {
         $userData = [
-            'id' => $identifier, //str_replace('-', '', $identifier),
+            'id' => $identifier,
             'username' => $username,
             'email' => $email,
         ];

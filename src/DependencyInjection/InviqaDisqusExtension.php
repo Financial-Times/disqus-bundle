@@ -7,7 +7,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class DisqusExtension extends Extension
+class InviqaDisqusExtension extends Extension
 {
     /**
      * {@inheritdoc}
