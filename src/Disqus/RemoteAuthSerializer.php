@@ -1,33 +1,43 @@
 <?php
 
-namespace Inviqa\DisqusBundle\Serializer;
+namespace Inviqa\DisqusBundle\Disqus;
 
 use AuthenticationBundle\Security\User\WebUser;
 
-class UserDataSerializer
+class RemoteAuthSerializer
 {
+    /**
+     * @var string
+     */
     private $disqusSecretKey;
 
-    public function __construct(string $disqusSecretKey)
+    /**
+     * @var int
+     */
+    private $timestamp;
+
+    public function __construct(string $disqusSecretKey, int $timestamp = null)
     {
         $this->disqusSecretKey = $disqusSecretKey;
+        $this->timestamp = $timestamp ?: time();
     }
 
-    public function serialize(WebUser $webUser): string
+    public function remoteAuthForUser($identifier, string $username, string $email): string
     {
         $userData = [
-            'id' => str_replace('-', '', $webUser->revealUser()->id()),
-            'username' => $webUser->getUsername(),
-            'email' => $webUser->revealUser()->getEmail(),
+            'id' => $identifier, //str_replace('-', '', $identifier),
+            'username' => $username,
+            'email' => $email,
         ];
 
         $message = base64_encode(json_encode($userData));
+        $serialized = sprintf(
+            '%s %s %s',
+            $message,
+            $this->dsqHmacSha1($message . ' ' . $this->timestamp, $this->disqusSecretKey),
+            $this->timestamp
+        );
 
-        $timestamp = time();
-
-        $hmac = $this->dsqHmacSha1($message . ' ' . $timestamp, $this->disqusSecretKey);
-
-        $serialized = vsprintf('%s %s %s', [$message, $hmac, $timestamp]);
         return $serialized;
     }
 

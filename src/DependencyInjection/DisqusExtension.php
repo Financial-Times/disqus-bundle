@@ -16,5 +16,11 @@ class DisqusExtension extends Extension
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
+
+        $config = $this->processConfiguration(new Configuration(), $configs);
+
+        foreach ($config as $key => $value) {
+            $container->setParameter('inviqa_disqus_' . $key, $value);
+        }
     }
 }

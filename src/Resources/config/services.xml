@@ -5,13 +5,15 @@
 
    <services>
 
-       <service id="disqus.twig.disqus_extension" class="DisqusBundle\Twig\DisqusExtension">
-           <argument type="service" id="disqus.serialier.user_data_serializer" />
+       <service id="inviqa.disqus.twig.disqus_extension" class="Inviqa\DisqusBundle\Twig\DisqusExtension">
+           <argument type="service" id="inviqa.disqus.remote_auth_serializer" />
+           <argument>%inviqa_disqus_public_key%</argument>
+           <argument>%inviqa_disqus_forum_name%</argument>
            <tag name="twig.extension"/>
        </service>
 
-       <service id="disqus.serialier.user_data_serializer" class="DisqusBundle\Serializer\UserDataSerializer">
-           <argument>%disqus_secret_key%</argument>
+       <service id="inviqa.disqus.remote_auth_serializer" class="Inviqa\DisqusBundle\Disqus\RemoteAuthSerializer">
+           <argument>%inviqa_disqus_secret_key%</argument>
        </service>
 
    </services>

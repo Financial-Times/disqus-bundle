@@ -1,19 +1,41 @@
-##Disqus
+Inviqa Disqus Bundle
+====================
 
-Integration for ````Disqus```` comments (iframe based) and according Single Sign On
+This Bundle provides a Twig Extension for aiding with Disqus integration.
 
-###Developer documentation
+Integration
+-----------
+
+Create a Twig template as follows:
+
+```twig
+<div id="disqus_thread"></div>
+
+<script type="text/javascript">
+    var disqus_config = function () {
+
+        {% if <the user is logged in> %}
+            this.page.remote_auth_s3 = '{{ inviqa_disqus_get_remote_auth_s3(<userId>, <username>, <email>) }}';
+            this.page.api_key = '{{ inviqa_disqus_public_key() }}';
+        {% endif %}
+
+        this.page.url = '{{ app.request.uri }}';
+        this.page.identifier = '{{ <page identifier> }}';
+        this.page.title = '{{ <page title> }}';
+    };
+
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://{{ inviqa_disqus_forum_name() }}.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+```
+
+Developer documentation
+------------------------
 
 https://help.disqus.com/customer/en/portal/articles/1243156-developer-documentation
-
-###Configuration parameters
-
- - ````disqus_base_uri````: Base URI
-     - e.g. ````https://forumname-production.disqus.com/````
- - ````disqus_forum````: Forum name
- - ````disqus_public_key````: Disqus public API key
- - ````disqus_secret_key````: Disqus secret key
-
-###Source codes
-
-    DisqusBundle
